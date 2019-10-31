@@ -38,6 +38,12 @@ describe SecQuery::Entity do
     end
   end
 
+  describe "Entity cannot be found", vcr: { cassette_name: "BHGE"} do
+    it 'returns nil' do
+      expect(SecQuery::Entity.find('BHGE')).to be_nil
+    end
+  end
+
   describe "Company Queries - Alphabet Inc.", vcr: { cassette_name: "googl"} do
 
     let(:query){{name: "Alphabet Inc.", sic: "7370", symbol: "googl", cik:"0001652044"}}
