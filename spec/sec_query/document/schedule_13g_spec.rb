@@ -38,7 +38,7 @@ describe SecQuery::Document::Schedule13g do
 
     let(:document) { described_class.fetch(uri) }
 
-    it 'finds cusip' do
+    xit 'finds cusip' do
       skips = [
                 'LLL', # not found in SEC web search
                 'BHGE', # not found in SEC web search

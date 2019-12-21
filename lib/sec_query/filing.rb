@@ -27,6 +27,10 @@ module SecQuery
         document_url ||= detail.format_files.find {|f| f.dig('Document', 'link').end_with?('.txt') }&.dig('Document', 'link')
         return unless document_url
         @document = Document::Schedule13g.fetch(document_url)
+      when '4'
+        return unless detail.respond_to?(:xml_format_files) && detail.xml_format_files.any?
+        document_url = detail.xml_format_files.first['Document']['link']
+        @document = Document::Form4.fetch(document_url)
       end
     end
 
