@@ -18,6 +18,18 @@ module SecQuery
       @detail ||= FilingDetail.fetch(@link)
     end
 
+    def document
+      return @document if @document
+      case term
+      when 'SC 13G', 'SC 13G/A'
+        return unless detail.respond_to?(:format_files) && detail.format_files.any?
+        document_url = detail.format_files.find {|f| f.dig('Document', 'link').end_with?('.htm') }&.dig('Document', 'link')
+        document_url ||= detail.format_files.find {|f| f.dig('Document', 'link').end_with?('.txt') }&.dig('Document', 'link')
+        return unless document_url
+        @document = Document::Schedule13g.fetch(document_url)
+      end
+    end
+
     def self.fetch(uri, &blk)
       open(uri) do |rss|
         parse_rss(rss, &blk)
