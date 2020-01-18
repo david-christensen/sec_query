@@ -172,6 +172,20 @@ module SecQuery
       filings.is_a?(Array) ? filings.first : nil
     end
 
+    def self.find_all(cik, args={})
+      start = 0
+      count = 80
+      filings = []
+      found_filings = find(cik, start, count, args)
+      filings += found_filings
+      while found_filings.count == count
+        start += count
+        found_filings = find(cik, start, count, args)
+        filings += found_filings
+      end
+      filings
+    end
+
     def self.parse(cik, document)
       filings = []
       if document.xpath('//content').to_s.length > 0
