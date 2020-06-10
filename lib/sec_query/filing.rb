@@ -186,6 +186,22 @@ module SecQuery
       filings
     end
 
+    def self.find_by_link(cik, link)
+      start = 0
+      count = 80
+      filings = []
+      found_filings = find(cik, start, count, args)
+      filings += found_filings
+      filing = found_filings.find {|f| f.link == link }
+      while found_filings.count == count || filing
+        start += count
+        found_filings = find(cik, start, count, args)
+        filings += found_filings
+        filing = found_filings.find {|f| f.link == link }
+      end
+      filing
+    end
+
     def self.parse(cik, document)
       filings = []
       if document.xpath('//content').to_s.length > 0
