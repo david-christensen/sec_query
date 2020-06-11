@@ -190,12 +190,12 @@ module SecQuery
       start = 0
       count = 80
       filings = []
-      found_filings = find(cik, start, count, args)
+      found_filings = find(cik, start, count)
       filings += found_filings
       filing = found_filings.find {|f| f.link == link }
       while found_filings.count == count || filing
         start += count
-        found_filings = find(cik, start, count, args)
+        found_filings = find(cik, start, count)
         filings += found_filings
         filing = found_filings.find {|f| f.link == link }
       end
