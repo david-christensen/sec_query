@@ -18,7 +18,7 @@ module SecQuery
       end
 
       def self.fetch(primary_doc_url, table_doc_url)
-        html = Nokogiri::HTML(open(primary_doc_url))
+        html = Nokogiri::HTML(URI.open(primary_doc_url))
         # document = Hash.from_xml(html.xpath('//body//ownershipdocument').to_s)&.dig('ownershipdocument') || {}
         # new(document)
         # Hash.from_xml(html.xpath('//body//informationtable').to_s)['infotable']
@@ -34,7 +34,7 @@ module SecQuery
         header_data = hsh['edgarsubmission']['headerdata']
         form_data = hsh['edgarsubmission']['formdata']
 
-        html = Nokogiri::HTML(open(table_doc_url))
+        html = Nokogiri::HTML(URI.open(table_doc_url))
         hsh = Hash.from_xml(html.xpath('//body/informationtable').to_xml)
 
         table = hsh['informationtable']['infotable']

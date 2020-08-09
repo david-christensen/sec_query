@@ -13,9 +13,9 @@ module SecQuery
 
       def self.fetch(uri)
         if uri.end_with?('.htm')
-          parser = SecQuery::Document::Parsers::Schedule13gHtm.new(Nokogiri::HTML(open(uri)), uri)
+          parser = SecQuery::Document::Parsers::Schedule13gHtm.new(Nokogiri::HTML(URI.open(uri)), uri)
         else
-          parser = SecQuery::Document::Parsers::Schedule13gTxt.new(open(uri) {|f| f.read }, uri)
+          parser = SecQuery::Document::Parsers::Schedule13gTxt.new(URI.open(uri) {|f| f.read }, uri)
         end
 
         new(parser)

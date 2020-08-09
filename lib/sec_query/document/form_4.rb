@@ -151,7 +151,7 @@ module SecQuery
       end
 
       def self.fetch(uri)
-        html = Nokogiri::HTML(open(uri))
+        html = Nokogiri::HTML(URI.open(uri))
         document = Hash.from_xml(html.xpath('//body//ownershipdocument').to_s)&.dig('ownershipdocument') || {}
         new(document)
       end

@@ -127,7 +127,7 @@ module SecQuery
     end
 
     def self.fetch(uri)
-      document = Nokogiri::HTML(open(uri.gsub('http:', 'https:')))
+      document = Nokogiri::HTML(URI.open(uri.gsub('http:', 'https:')))
       filing_date = document.xpath('//*[@id="formDiv"]/div[2]/div[1]/div[2]').text
       accepted_date = document.xpath('//*[@id="formDiv"]/div[2]/div[1]/div[4]').text
       period_of_report = document.xpath('//*[@id="formDiv"]/div[2]/div[2]/div[2]').text
