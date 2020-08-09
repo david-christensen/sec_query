@@ -218,6 +218,24 @@ module SecQuery
           end
         end
       end
+
+      unless filings.any?
+        if document.xpath('//feed/entry/content').to_s.length > 0
+          document.xpath('//feed/entry/content').each do |e|
+            if e.xpath('//content/accession-number').to_s.length > 0
+              content = Hash.from_xml(e.to_s)['content']
+              content[:cik] = cik
+              content[:file_id] = content.delete('accession_nunber')
+              content[:date] = content.delete('filing_date')
+              content[:link] = content.delete('filing_href')
+              content[:term] = content.delete('filing_type')
+              content[:title] = content.delete('form_name')
+              filings << Filing.new(content)
+            end
+          end
+        end
+      end
+
       filings
     end
 
