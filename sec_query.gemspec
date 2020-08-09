@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
   s.summary     = 'A ruby gem for querying the United States Securities and Exchange Commission Edgar System.'
   s.description = 'Search for company or person, by name, symbol or Central Index Key (CIK), and retrieve filings.'
 
-  s.rubyforge_project = 'sec_query'
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
