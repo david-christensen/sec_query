@@ -74,7 +74,7 @@ describe SecQuery::Filing do
     let(:cik){"0000320193"}
     
     context "when querying by cik" do
-      let(:filings){ SecQuery::Filing.find(cik) }
+      let(:filings) { SecQuery::Filing.find(cik) }
 
       describe "Filings", vcr: { cassette_name: "Steve Jobs"} do
         it_behaves_like "it found filings"

@@ -1,18 +1,39 @@
+require_relative 'form_13F_HR/form'
+require_relative 'form_13F_HR/table'
+
 module SecQuery
   module Document
     class Form13F_HR
-      attr_reader :type, :period_of_report, :subject_to_section_16
+      attr_reader :type, :period_of_report, :table, :header, :form
 
       def initialize(header, form, table)
         @header = header
-        @form = form
-        @table = table
+
+        @type = header['submissiontype']
+        @period_of_report = header['periodofreport']
+        @filer_info = {
+          'live_test_flag' => header['filerinfo'] && header['filerinfo']['livetestflag'] || nil,
+          'flags' => header['filerinfo'] && header['filerinfo']['flags'] || nil,
+          'filer' => header['filerinfo'] && header['filerinfo']['filer'] || nil,
+        } if header['filerinfo']
+
+        @filer_cik = header['filerinfo'] &&
+          header['filerinfo']['filer'] &&
+          header['filerinfo']['filer']['credentials'] &&
+          header['filerinfo']['filer']['credentials']['cik'] || nil
+
+
+        @form = form.is_a?(Hash) ? Form.new(form) : form
+        @table = table.is_a?(Array) ? Table.new(table) : table
       end
 
       def to_h
         {
-          'header' => @header,
-          'form' => @form,
+          'type' => @type,
+          'period_of_report' => @period_of_report,
+          'filer_cik' => @filer_cik,
+          'filer_info' => @filer_info,
+          'form' => @form.respond_to?(:to_h) ? @form.to_h : @form,
           'table' => @table
         }
       end
