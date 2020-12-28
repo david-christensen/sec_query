@@ -1,5 +1,7 @@
 require_relative 'form_13F_HR/form'
 require_relative 'form_13F_HR/table'
+require_relative 'form_13F_HR/text_doc/header'
+require_relative 'form_13F_HR/text_doc/table'
 
 module SecQuery
   module Document
@@ -36,6 +38,16 @@ module SecQuery
           'form' => @form.respond_to?(:to_h) ? @form.to_h : @form,
           'table' => @table
         }
+      end
+
+      def self.fetch_text_document(cik, term, period_of_report, text_file_url)
+        header = TextDoc::Header.new(cik, term, period_of_report)
+
+        lines = URI.open(text_file_url).string.split("\n")
+
+        table = TextDoc::Table.parse(lines)
+
+        new(header.to_h, {}, table.to_a)
       end
 
       def self.fetch(primary_doc_url, table_doc_url)

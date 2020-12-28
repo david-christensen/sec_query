@@ -7,7 +7,6 @@ describe SecQuery::Document::Form4, vcr: { cassette_name: 'form_4' } do
   subject(:document) { SecQuery::Document::Form4.fetch(uri) }
 
   it 'captures top level document info' do
-    byebug
     expect(document.type).to eq '4'
     expect(document.subject_to_section_16).to be true
     expect((Date.strptime(document.period_of_report, '%Y-%m-%d') rescue false)).to be_a Date

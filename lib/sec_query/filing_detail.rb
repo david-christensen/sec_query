@@ -114,6 +114,18 @@ module SecQuery
       )
     end
 
+    def txt_data_files
+      return @txt_data_files if @txt_data_files
+      return unless data_files
+      @txt_data_files = data_files.select {|f| f['Document']['text'].length > 4 && f['Document']['text'][-4..-1] == '.txt' }
+    end
+
+    def txt_format_files
+      return @txt_format_files if @txt_format_files
+      return unless format_files
+      @txt_format_files = format_files.select {|f| f['Document']['text'].length > 4 && f['Document']['text'][-4..-1] == '.txt' }
+    end
+
     def xml_data_files
       return @xml_data_files if @xml_data_files
       return unless data_files

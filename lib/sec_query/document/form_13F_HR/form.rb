@@ -6,9 +6,9 @@ module SecQuery
 
         def initialize(form)
           @raw_form = form
-          @cover_page = transform_cover_page(form['coverpage'])
-          @signature_block = transform_signature_block(form['signatureblock'])
-          @summary_page = transform_summary_page(form['summarypage'])
+          @cover_page = transform_cover_page(form['coverpage'] || {})
+          @signature_block = transform_signature_block(form['signatureblock'] || {})
+          @summary_page = transform_summary_page(form['summarypage'] || {})
           @form = form.map {|r| transform_keys(r) } if form.is_a?(Array)
         end
 

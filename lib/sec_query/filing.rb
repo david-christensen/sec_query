@@ -32,12 +32,22 @@ module SecQuery
         document_url = detail.xml_format_files.first['Document']['link']
         @document = Document::Form4.fetch(document_url)
       when '13F-HR'
-        return unless detail.respond_to?(:xml_format_files) && detail.xml_format_files.any?
-        primary_doc_hash = detail.xml_format_files.find {|h| h['Type'] == '13F-HR' } || {}
-        table_doc_hash = detail.xml_format_files.find {|h| h['Type'] == 'INFORMATION TABLE' } || {}
-        primary_doc_url = primary_doc_hash['Document']['link'] || ''
-        table_doc_url   = table_doc_hash['Document']['link'] || ''
-        return unless primary_doc_url && table_doc_url
+        if detail.respond_to?(:xml_format_files) && detail.xml_format_files.any?
+          primary_doc_hash = detail.xml_format_files.find {|h| h['Type'] == '13F-HR' } || {}
+          table_doc_hash = detail.xml_format_files.find {|h| h['Type'] == 'INFORMATION TABLE' } || {}
+          primary_doc_url = primary_doc_hash['Document']['link'] || ''
+          table_doc_url   = table_doc_hash['Document']['link'] || ''
+          return unless primary_doc_url && table_doc_url
+        elsif detail.respond_to?(:txt_format_files) && detail.txt_format_files.any?
+          txt_file_data = detail.format_files.find {|hsh| hsh['Type'] == '13F-HR'}
+          txt_file_link = txt_file_data['Document']['link']
+          return unless txt_file_link
+
+          @document = Document::Form13F_HR.fetch_text_document(cik, term, detail.period_of_report, txt_file_link)
+          return @document
+        else
+          return
+        end
 
         @document = Document::Form13F_HR.fetch(primary_doc_url, table_doc_url)
       end
